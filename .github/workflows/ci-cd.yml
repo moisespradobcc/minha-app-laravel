@@ -1,0 +1,37 @@
+name: Bloco 2 - Build e Push da Imagem Docker
+
+# Gatilho: Rodar este script sempre que houver um "push"
+# para a branch "main"
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    # Usar uma máquina virtual Linux para rodar o script
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o seu código do repositório
+      - name: 1. Checkout do Repositório
+        uses: actions/checkout@v3
+
+      # 2. Faz login no Docker Hub usando os segredos
+      - name: 2. Login no Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. O passo mais importante: Construir e Enviar
+      - name: 3. Build e Push da Imagem
+        uses: docker/build-push-action@v4
+        with:
+          context: . # Usa a raiz do projeto
+          file: ./Dockerfile # USA O DOCKERFILE DE PRODUÇÃO
+          push: true # "push: true" significa "envie para o hub"
+
+          # Tags da imagem (ex: moisespradobcc/minha-app:latest)
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/minha-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/minha-app:${{ github.sha }}
