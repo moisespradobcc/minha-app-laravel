@@ -1,5 +1,13 @@
 # --- ESTÁGIO 1: Dependências do Composer ---
 FROM composer:2.5 as vendor
+# INSTALA AS EXTENSÕES QUE FALTAM
+# A imagem do composer é baseada em Debian (como o Ubuntu)
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libpng-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo_mysql zip gd bcmath
+
 WORKDIR /app
 COPY database/ database/
 COPY composer.json composer.lock ./
