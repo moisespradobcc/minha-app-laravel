@@ -12,7 +12,7 @@ RUN apk update && apk add --no-cache \
 WORKDIR /app
 COPY database/ database/
 COPY composer.json composer.lock ./
-RUN composer install --no-interaction --no-dev --optimize-autoloader
+RUN composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # --- ESTÁGIO 2: Aplicação (PHP-FPM) ---
 # Usando a versão 8.2 correta
