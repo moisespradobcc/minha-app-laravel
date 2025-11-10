@@ -2,7 +2,8 @@
 FROM composer:2.5 as vendor
 # INSTALA AS EXTENSÕES QUE FALTAM
 # A imagem do composer é baseada em Debian (como o Ubuntu)
-RUN apt-get update && apt-get install -y \
+# A imagem do composer é baseada em ALPINE (usa 'apk')
+RUN apk update && apk add --no-cache \
     libzip-dev \
     libpng-dev \
     libxml2-dev \
