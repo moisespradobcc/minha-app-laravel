@@ -1,4 +1,5 @@
-version: '3.8'
+# Você pode apagar esta linha se quiser (para o aviso sumir)
+version: '3.8' 
 
 services:
   # --- A Aplicação (PHP-FPM) ---
@@ -8,8 +9,7 @@ services:
     restart: unless-stopped
     env_file: .env.prod # Carrega as senhas de produção
     volumes:
-      # O Dockerfile expôs /var/www/html como um volume.
-      # Nós o nomeamos como 'app_code'
+      # O volume do Dockerfile, que nomeamos como 'app_code'
       - app_code:/var/www/html
 
   # --- O Garçom (Nginx) ---
@@ -22,8 +22,7 @@ services:
     volumes:
       # Mapeia o arquivo de config
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      # MONTA O MESMO VOLUME 'app_code' QUE O 'app' USA
-      # Agora o Nginx pode ler a pasta /var/www/html/public
+      # Monta o mesmo volume 'app_code' que o 'app' usa
       - app_code:/var/www/html
     depends_on:
       - app
@@ -37,6 +36,8 @@ services:
     volumes:
       - db_prod_data:/var/lib/mysql
 
+# --- DEFINIÇÃO DOS VOLUMES ---
+# (O 'app_storage' não está aqui, por isso deu erro antes)
 volumes:
   app_code: # O volume compartilhado com o código
   db_prod_data: # O volume do banco de dados de produção
