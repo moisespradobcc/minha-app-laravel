@@ -1,17 +1,13 @@
 # --- ESTÁGIO 1: Dependências do Composer ---
 FROM composer:2.5 as vendor
-# INSTALA AS EXTENSÕES QUE FALTAM
-# A imagem do composer é baseada em Debian (como o Ubuntu)
-# A imagem do composer é baseada em ALPINE (usa 'apk')
 RUN apk update && apk add --no-cache \
     libzip-dev \
     libpng-dev \
     libxml2-dev \
     && docker-php-ext-install pdo_mysql zip gd bcmath
-
 WORKDIR /app
-COPY database/ database/
-COPY composer.json composer.lock ./
+# COPIA TODO O CÓDIGO (exceto o que está no .dockerignore)
+COPY . .
 RUN composer install --no-interaction --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # --- ESTÁGIO 2: Aplicação (PHP-FPM) ---
