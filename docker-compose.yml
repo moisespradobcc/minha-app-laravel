@@ -1,0 +1,39 @@
+services:
+  # Serviço da Aplicação (PHP)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev # Vamos criar este arquivo em breve
+    container_name: laravel_app_dev
+    ports:
+      - "8000:8000" # Mapeia a porta 8000 do seu PC para a 8000 do container
+    volumes:
+      - .:/var/www/html # A mágica: espelha seu código local para dentro do container
+    depends_on:
+      - db
+    environment:
+      # Variáveis que o Laravel usará para conectar no DB
+      - DB_CONNECTION=mysql
+      - DB_HOST=db       # "db" é o nome do serviço MariaDB abaixo
+      - DB_PORT=3306
+      - DB_DATABASE=laravel
+      - DB_USERNAME=laravel
+      - DB_PASSWORD=password
+      - APP_ENV=local
+      - APP_DEBUG=true
+
+  # Serviço do Banco de Dados (MariaDB)
+  db:
+    image: mariadb:10.6 # Imagem oficial do MariaDB
+    container_name: mariadb_db_dev
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root_password # Senha de root do banco
+    volumes:
+      - db_data:/var/lib/mysql # Persiste os dados do banco na sua máquina
+
+volumes:
+  db_data: # Define o volume nomeado

@@ -1,0 +1,20 @@
+# Arquivos do Sistema
+.DS_Store
+Thumbs.db
+
+# Ignora logs
+/logs
+*.log
+
+# Dependências
+/vendor
+/node_modules
+
+# Arquivo de Ambiente - NUNCA ENVIE ISSO!
+.env
+.env.backup
+.env.prod
+
+# Arquivos de IDE
+.idea/
+.vscode/

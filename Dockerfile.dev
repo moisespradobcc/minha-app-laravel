@@ -1,0 +1,22 @@
+# Imagem base do PHP
+FROM php:8.2-cli
+
+# Instala dependências do sistema e extensões do PHP que o Laravel precisa
+RUN apt-get update && apt-get install -y \
+    git \
+    zip \
+    unzip \
+    libzip-dev \
+    libpng-dev \
+    libxml2-dev \
+    && docker-php-ext-install pdo_mysql zip gd bcmath
+
+# Instala o Composer globalmente dentro da imagem
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Define o diretório de trabalho
+WORKDIR /var/www/html
+
+# Comando padrão para iniciar o servidor de desenvolvimento do Laravel
+# O host 0.0.0.0 permite que ele seja acessado de fora do container
+CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
